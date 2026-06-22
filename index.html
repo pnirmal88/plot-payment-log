@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Plot Sale Payment Log</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f5f5f4;
+    color: #1c1c1c;
+    margin: 0;
+    padding: 24px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 22px; margin-bottom: 4px; }
+  .updated { color: #6b6b6b; font-size: 13px; margin-bottom: 20px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 13.5px;
+  }
+  th {
+    background: #2c2c2c;
+    color: white;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+  }
+  tr:hover { background: #fafafa; }
+  .yes { color: #1a7f37; font-weight: 600; }
+  .no { color: #b42318; font-weight: 600; }
+  .na { color: #999; }
+  .amount { font-weight: 600; white-space: nowrap; }
+  .total-row td {
+    font-weight: 700;
+    background: #f0f0ee;
+    border-top: 2px solid #ccc;
+  }
+  .note-plot { color: #555; }
+  .note-reg { color: #8a5a00; }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin: 20px 0 28px;
+  }
+  .kpi-card {
+    background: white;
+    border-radius: 10px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    border-top: 3px solid #ccc;
+  }
+  .kpi-card .label {
+    font-size: 12px;
+    color: #6b6b6b;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    margin-bottom: 6px;
+  }
+  .kpi-card .value {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .kpi-total { border-top-color: #2c2c2c; }
+  .kpi-done { border-top-color: #1a7f37; }
+  .kpi-done .value { color: #1a7f37; }
+  .kpi-pending { border-top-color: #b42318; }
+  .kpi-pending .value { color: #b42318; }
+  .kpi-payees-added { border-top-color: #1a7f37; }
+  .kpi-payees-pending { border-top-color: #b42318; }
+  @media (max-width: 800px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  /* Mobile-specific overrides */
+  @media (max-width: 640px) {
+    body { padding: 12px; }
+    h1 { font-size: 18px; }
+    .updated { font-size: 12px; margin-bottom: 14px; }
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 14px 0 20px; }
+    .kpi-card { padding: 10px 12px; }
+    .kpi-card .label { font-size: 10.5px; }
+    .kpi-card .value { font-size: 16px; }
+
+    table, thead, tbody, th, td, tr { display: block; }
+    table { border-radius: 8px; }
+    thead { display: none; }
+    tr {
+      border-bottom: 1px solid #eee;
+      padding: 10px 12px;
+      margin-bottom: 0;
+    }
+    tr.total-row {
+      background: #f0f0ee;
+      border-top: 2px solid #ccc;
+      padding: 12px;
+    }
+    td {
+      border-bottom: none;
+      padding: 3px 0;
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    td::before {
+      content: attr(data-label);
+      font-weight: 600;
+      color: #6b6b6b;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      flex-shrink: 0;
+    }
+    td:first-child::before { content: ""; }
+    td:first-child { font-weight: 700; color: #2c2c2c; justify-content: flex-start; }
+    .total-row td { display: flex; }
+    .total-row td:first-child::before { content: ""; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Plot Sale – Payment Log</h1>
+  <div class="updated">Last updated: 22 June 2026</div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card kpi-total">
+      <div class="label">Total Amount</div>
+      <div class="value">₹80,26,650</div>
+    </div>
+    <div class="kpi-card kpi-done">
+      <div class="label">Amount Transferred</div>
+      <div class="value">₹21,27,650</div>
+    </div>
+    <div class="kpi-card kpi-pending">
+      <div class="label">Pending Amount</div>
+      <div class="value">₹58,99,000</div>
+    </div>
+    <div class="kpi-card kpi-payees-added">
+      <div class="label">Payees Added</div>
+      <div class="value">5/11</div>
+    </div>
+    <div class="kpi-card kpi-payees-pending">
+      <div class="label">Yet to be Added</div>
+      <div class="value">6/11</div>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Payee</th>
+        <th>Account No.</th>
+        <th>A/c Type</th>
+        <th>IFSC / Bank</th>
+        <th>Amount</th>
+        <th>Payee Added</th>
+        <th>Amount Transferred</th>
+        <th>Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="#">1</td><td data-label="Payee">Sree Krishna Automobiles</td><td data-label="Account No.">120039374207</td><td data-label="A/c Type">Current</td>
+        <td data-label="IFSC / Bank">CNRB0016140, Canara Bank, Ganapathy</td><td data-label="Amount" class="amount">₹10,00,000</td>
+        <td data-label="Payee Added" class="yes">Yes</td><td data-label="Amount Transferred" class="no">No</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">2</td><td data-label="Payee">Shree Cars</td><td data-label="Account No.">125007873765</td><td data-label="A/c Type">Current</td>
+        <td data-label="IFSC / Bank">CNRB0016140, Canara Bank, Ganapathy</td><td data-label="Amount" class="amount">₹7,00,000</td>
+        <td data-label="Payee Added" class="yes">Yes</td><td data-label="Amount Transferred" class="no">No</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">3</td><td data-label="Payee">Rameshkumar S</td><td data-label="Account No.">67330253936</td><td data-label="A/c Type">Savings</td>
+        <td data-label="IFSC / Bank">SBIN0071157, SBI, Karegoundenpalayam, Annur</td><td data-label="Amount" class="amount">₹8,00,000</td>
+        <td data-label="Payee Added" class="yes">Yes</td><td data-label="Amount Transferred" class="no">No</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">4</td><td data-label="Payee">Smt. Gokilamani Duraiswamy</td><td data-label="Account No.">1662155000068637</td><td data-label="A/c Type">Savings (SB-Resident)</td>
+        <td data-label="IFSC / Bank">KVBL0001662, Karur Vysya Bank</td><td data-label="Amount" class="amount">₹7,00,000</td>
+        <td data-label="Payee Added" class="yes">Yes</td><td data-label="Amount Transferred" class="no">No</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">5</td><td data-label="Payee">Sathyapriya</td><td data-label="Account No.">50100592381074</td><td data-label="A/c Type">Savings</td>
+        <td data-label="IFSC / Bank">HDFC0003647, HDFC Bank, Singanallur, Coimbatore</td><td data-label="Amount" class="amount">₹4,99,000</td>
+        <td data-label="Payee Added" class="no">No</td><td data-label="Amount Transferred" class="no">No</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">6</td><td data-label="Payee">Janaki R</td><td data-label="Account No.">1120155000241447</td><td data-label="A/c Type">Savings</td>
+        <td data-label="IFSC / Bank">KVBL0001120, Karur Vysya Bank, Coimbatore Main</td><td data-label="Amount" class="amount">₹5,00,000</td>
+        <td data-label="Payee Added" class="no">No</td><td data-label="Amount Transferred" class="no">No</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">7</td><td data-label="Payee">RR Builders and Developers</td><td data-label="Account No.">1753135000002167</td><td data-label="A/c Type">Current</td>
+        <td data-label="IFSC / Bank">KVBL0001753, Karur Vysya Bank, Kunnathur Branch</td><td data-label="Amount" class="amount">₹5,00,000</td>
+        <td data-label="Payee Added" class="no">No</td><td data-label="Amount Transferred" class="no">No</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">8</td><td data-label="Payee">DK Infra</td><td data-label="Account No.">922020021585611</td><td data-label="A/c Type">Current</td>
+        <td data-label="IFSC / Bank">UTIB0004825, Axis Bank</td><td data-label="Amount" class="amount">₹7,00,000</td>
+        <td data-label="Payee Added" class="no">No</td><td data-label="Amount Transferred" class="no">No</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">9</td><td data-label="Payee">R. Dinesh Kumar</td><td data-label="Account No.">32611671048</td><td data-label="A/c Type">Savings</td>
+        <td data-label="IFSC / Bank">SBIN0012245, SBI, Kuniyamuthur</td><td data-label="Amount" class="amount">₹5,00,000</td>
+        <td data-label="Payee Added" class="no">No</td><td data-label="Amount Transferred" class="no">No</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">10</td><td data-label="Payee">Cash handed off</td><td data-label="Account No." class="na">NA</td><td data-label="A/c Type" class="na">NA</td>
+        <td data-label="IFSC / Bank" class="na">NA</td><td data-label="Amount" class="amount">₹15,00,000</td>
+        <td data-label="Payee Added" class="na">NA</td><td data-label="Amount Transferred" class="yes">Yes</td><td data-label="Note" class="note-plot">Plot Sale</td>
+      </tr>
+      <tr>
+        <td data-label="#">11</td><td data-label="Payee">Mr. Varatharaj R</td><td data-label="Account No.">256102000000792</td><td data-label="A/c Type">Self Operated</td>
+        <td data-label="IFSC / Bank">IOBA0002561, Indian Overseas Bank, Periyanaickenpalayam</td><td data-label="Amount" class="amount">₹6,27,650</td>
+        <td data-label="Payee Added" class="yes">Yes</td><td data-label="Amount Transferred" class="yes">Yes</td><td data-label="Note" class="note-reg">Registration cost</td>
+      </tr>
+      <tr class="total-row">
+        <td colspan="5" data-label="">Total</td>
+        <td data-label="Amount" class="amount">₹80,26,650</td>
+        <td colspan="3" data-label=""></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
