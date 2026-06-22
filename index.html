@@ -36,7 +36,7 @@
   /* KPI strip */
   .kpi-strip {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 10px;
     margin-bottom: 28px;
   }
@@ -104,7 +104,7 @@
     height: 100%;
     background: linear-gradient(90deg, #1a7f37, #2ecc71);
     border-radius: 99px;
-    width: 26.5%;
+    width: 23.6%;
     transition: width 0.6s ease;
   }
 
@@ -228,6 +228,47 @@
   tr.total-row td .amount { color: white; font-size: 15px; }
 
   /* Legend */
+  /* Filter bar */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 14px 18px;
+    border-bottom: 1px solid #f2f2f0;
+    flex-wrap: wrap;
+    background: #fafaf8;
+  }
+  .filter-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .filter-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .filter-btn {
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 99px;
+    padding: 5px 13px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+  .filter-btn:hover { border-color: #bbb; color: #333; }
+  .filter-btn.active-yes { background: #dcfce7; border-color: #86efac; color: #15803d; }
+  .filter-btn.active-no  { background: #fee2e2; border-color: #fca5a5; color: #b91c1c; }
+  .filter-btn.active-all { background: #111; border-color: #111; color: white; }
+  .filter-divider { width: 1px; height: 20px; background: #e5e5e5; }
+
   .legend {
     display: flex;
     gap: 20px;
@@ -288,14 +329,14 @@
 
   <div class="page-header">
     <h1>Plot Sale &mdash; Payment Log</h1>
-    <div class="sub">Last updated: 22 June 2026 &nbsp;&bull;&nbsp; 11 payees &nbsp;&bull;&nbsp; Confidential</div>
+    <div class="sub">Last updated: 22 June 2026 &nbsp;&bull;&nbsp; 12 payees &nbsp;&bull;&nbsp; Confidential</div>
     <div class="sub" style="color:#c0392b; margin-top:4px;">&#x26A0; Test change — verify push to GitHub</div>
   </div>
 
   <div class="kpi-strip">
     <div class="kpi total">
       <div class="label">Total Amount</div>
-      <div class="value">&#8377;80,26,650</div>
+      <div class="value">&#8377;90,26,650</div>
     </div>
     <div class="kpi done">
       <div class="label">Transferred</div>
@@ -303,22 +344,19 @@
     </div>
     <div class="kpi pending">
       <div class="label">Pending</div>
-      <div class="value">&#8377;58,99,000</div>
+      <div class="value">&#8377;68,99,000</div>
     </div>
     <div class="kpi added">
-      <div class="label">Payees Added</div>
-      <div class="value">5 / 11</div>
-    </div>
-    <div class="kpi waiting">
-      <div class="label">Yet to Add</div>
-      <div class="value">6 / 11</div>
+      <div class="label">Payees Status</div>
+      <div class="value">5 / 12</div>
+      <div style="font-size:12px;color:#888;margin-top:6px;">7 yet to be added</div>
     </div>
   </div>
 
   <div class="progress-section">
     <div class="progress-header">
       <span>Transfer progress</span>
-      <strong>&#8377;21,27,650 of &#8377;80,26,650 &nbsp;(26.5%)</strong>
+      <strong>&#8377;21,27,650 of &#8377;90,26,650 &nbsp;(23.6%)</strong>
     </div>
     <div class="progress-bar">
       <div class="progress-fill"></div>
@@ -326,6 +364,21 @@
   </div>
 
   <div class="table-card">
+    <div class="filter-bar">
+      <div class="filter-group">
+        <span class="filter-label">Transferred</span>
+        <button class="filter-btn active-all" onclick="setFilter('transferred','all',this)">All</button>
+        <button class="filter-btn" onclick="setFilter('transferred','yes',this)">Yes</button>
+        <button class="filter-btn" onclick="setFilter('transferred','no',this)">No</button>
+      </div>
+      <div class="filter-divider"></div>
+      <div class="filter-group">
+        <span class="filter-label">Payee Added</span>
+        <button class="filter-btn active-all" onclick="setFilter('payee-added','all',this)">All</button>
+        <button class="filter-btn" onclick="setFilter('payee-added','yes',this)">Yes</button>
+        <button class="filter-btn" onclick="setFilter('payee-added','no',this)">No</button>
+      </div>
+    </div>
     <table>
       <thead>
         <tr>
@@ -341,7 +394,7 @@
       </thead>
       <tbody>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="yes">
           <td data-label="#"><span class="row-num">1</span></td>
           <td data-label="Payee">
             <div class="payee-name">Sree Krishna Automobiles</div>
@@ -355,7 +408,7 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="yes">
           <td data-label="#"><span class="row-num">2</span></td>
           <td data-label="Payee">
             <div class="payee-name">Shree Cars</div>
@@ -369,7 +422,7 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="yes">
           <td data-label="#"><span class="row-num">3</span></td>
           <td data-label="Payee">
             <div class="payee-name">Rameshkumar S</div>
@@ -383,7 +436,7 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="yes">
           <td data-label="#"><span class="row-num">4</span></td>
           <td data-label="Payee">
             <div class="payee-name">Smt. Gokilamani Duraiswamy</div>
@@ -397,7 +450,7 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="no">
           <td data-label="#"><span class="row-num">5</span></td>
           <td data-label="Payee">
             <div class="payee-name">Sathyapriya</div>
@@ -411,7 +464,7 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="no">
           <td data-label="#"><span class="row-num">6</span></td>
           <td data-label="Payee">
             <div class="payee-name">Janaki R</div>
@@ -425,7 +478,7 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="no">
           <td data-label="#"><span class="row-num">7</span></td>
           <td data-label="Payee">
             <div class="payee-name">RR Builders and Developers</div>
@@ -439,7 +492,7 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="no">
           <td data-label="#"><span class="row-num">8</span></td>
           <td data-label="Payee">
             <div class="payee-name">DK Infra</div>
@@ -453,7 +506,7 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="no">
           <td data-label="#"><span class="row-num">9</span></td>
           <td data-label="Payee">
             <div class="payee-name">R. Dinesh Kumar</div>
@@ -467,7 +520,7 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="yes" data-payee-added="na">
           <td data-label="#"><span class="row-num">10</span></td>
           <td data-label="Payee">
             <div class="payee-name">Cash handed off</div>
@@ -481,8 +534,22 @@
           <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
         </tr>
 
-        <tr>
+        <tr data-transferred="no" data-payee-added="na">
           <td data-label="#"><span class="row-num">11</span></td>
+          <td data-label="Payee">
+            <div class="payee-name">Cash handed off</div>
+            <div class="bank-name">Physical cash &mdash; no bank transfer</div>
+          </td>
+          <td data-label="Account No."><span class="acct-num" style="color:#bbb;">&#8212;</span></td>
+          <td data-label="A/c Type"><span class="acct-type" style="color:#bbb;">&#8212;</span></td>
+          <td data-label="Amount"><span class="amount">&#8377;10,00,000</span></td>
+          <td data-label="Payee Added"><span class="badge na"><span class="badge-dot"></span>N/A</span></td>
+          <td data-label="Transferred"><span class="badge no"><span class="badge-dot"></span>No</span></td>
+          <td data-label="Note"><span class="note-tag note-plot">Plot sale</span></td>
+        </tr>
+
+        <tr data-transferred="yes" data-payee-added="yes">
+          <td data-label="#"><span class="row-num">12</span></td>
           <td data-label="Payee">
             <div class="payee-name">Mr. Varatharaj R</div>
             <div class="bank-name">Indian Overseas Bank, Periyanaickenpalayam &nbsp;&middot;&nbsp; IOBA0002561</div>
@@ -496,8 +563,8 @@
         </tr>
 
         <tr class="total-row">
-          <td colspan="4" data-label="">Total (11 entries)</td>
-          <td data-label="Amount"><span class="amount">&#8377;80,26,650</span></td>
+          <td colspan="4" data-label="">Total (12 entries)</td>
+          <td data-label="Amount"><span class="amount">&#8377;90,26,650</span></td>
           <td colspan="3"></td>
         </tr>
 
@@ -515,5 +582,27 @@
   </div>
 
 </div>
+<script>
+  const filters = { transferred: 'all', 'payee-added': 'all' };
+
+  function setFilter(key, val, btn) {
+    filters[key] = val;
+    btn.closest('.filter-group').querySelectorAll('.filter-btn').forEach(b => {
+      b.className = 'filter-btn';
+    });
+    btn.classList.add(val === 'all' ? 'active-all' : val === 'yes' ? 'active-yes' : 'active-no');
+    applyFilters();
+  }
+
+  function applyFilters() {
+    document.querySelectorAll('tbody tr:not(.total-row)').forEach(row => {
+      const t = row.dataset.transferred;
+      const p = row.dataset.payeeAdded;
+      const tMatch = filters.transferred === 'all' || t === filters.transferred;
+      const pMatch = filters['payee-added'] === 'all' || p === filters['payee-added'];
+      row.style.display = (tMatch && pMatch) ? '' : 'none';
+    });
+  }
+</script>
 </body>
 </html>
